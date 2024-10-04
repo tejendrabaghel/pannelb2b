@@ -16,16 +16,19 @@ jobs:
       - name: Set up SSH
         uses: webfactory/ssh-agent@v0.5.3
         with:
-          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
-          
+          ssh-private-key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
 
       - name: Sync files to EC2
         run: |
-          rsync -avz --delete ./ root@ip-172-31-8-251:/var/www/html/
+          rsync -avz --delete ./ ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST_DNS }}:${{ secrets.EC2_TARGET_DIR }}
 
       - name: Execute remote commands
         run: |
-          ssh root@ip-172-31-8-251 << 'EOF'
-          cd /var/www/html/
+          ssh ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST_DNS }} << 'EOF'
+          cd ${{ secrets.EC2_TARGET_DIR }}
           # Optionally, run commands like:
-  
+          npm install
+          npm run build
+          # Restart your application if necessary
+          sudo systemctl restart your-app.service
+          EOF
