@@ -24,11 +24,7 @@ jobs:
 
       - name: Execute remote commands
         run: |
-          ssh user@your-ec2-instance-ip << 'EOF'
-          cd /path/to/deployment/directory
+          ssh root@ip-172-31-8-251 << 'EOF'
+          cd /var/www/html/
           # Optionally, run commands like:
-          npm install
-          npm run build
-          # Restart your application if necessary
-          sudo systemctl restart your-app.service
-          EOF
+  
